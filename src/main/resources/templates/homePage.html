@@ -1,19 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Web Dev Company Manager</title>
     <link rel="stylesheet" href="/Stylesheets/navbar.css">
+    <link rel="stylesheet" href="/Stylesheets/general.css">
     <link rel="icon" href="/Images/favicon.ico" type="image/x-icon">
+    <style>
+        table { width: 50%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        .overlay {position: fixed; top: 0; left: 0; width: 100%; height: 100%;background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 1000;}
+        .popup {background: white; padding: 30px; border-radius: 10px; text-align: center;}
+        .popup input { display: block; width: 100%; margin: 10px 0; padding: 8px; }
+    </style>
 </head>
 <body>
+    <div th:if="${mustChangePassword}" id="passwordPopup" class="overlay">
+        <div class="popup">
+            <h2>⚠️ Security Warning</h2>
+            <p>You're using the default password for superadmin, please change it now.</p>
+            <form th:action="@{/account/change-default-password}" method="post">
+                <input type="password" name="newPassword" placeholder="New Password" required minlength="6">
+                <button type="submit">Update Password</button>
+            </form>
+        </div>
+    </div>
+
     <nav>
-        <a href=""><div>Homepage</div></a>
-        <a href=""><div>Members</div></a>
-        <a href=""><div>Tasks</div></a>
+        <a href="#homepage"><div>Homepage</div></a>
+        <a href="#members"><div>Members</div></a>
+        <a href="#tasks"><div>Tasks</div></a>
+        <a th:if="${#authorization.expression('isAnonymous()')}" href="/login">
+            <div>Login</div></a>
+        <a th:if="${#authorization.expression('isAuthenticated()')}" href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();">
+            <div>Logout</div></a>
     </nav>
-    <h1>This is the home page!</h1>
+    <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <h1>Welcome back, <span th:text="${#authentication.name}">User</span>!</h1>
+    </div>
+
+    <div th:if="${#authorization.expression('isAnonymous()')}">
+        <h1>Welcome to the homepage!</h1>
+    </div>
+
+    <br><br><br><br>
+
+    <h1>Here are the existing admin users:</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Username</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="admin : ${listaAdmin}">
+            <td th:text="${admin.username}">username</td>
+        </tr>
+        </tbody>
+    </table>
 </body>
 </html>

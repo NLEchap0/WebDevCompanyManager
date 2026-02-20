@@ -6,7 +6,7 @@ nav{
     align-items: center; /* vertical alignment */
 }
 
-a{
+nav a{
     display: flex; /* enable alignment */
     justify-content: center; /* horizontal alignment */
     align-items: center; /* vertical alignment */
