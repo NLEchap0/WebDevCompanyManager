@@ -32,8 +32,8 @@
 
     <nav>
         <a href="#homepage"><div>Homepage</div></a>
-        <a href="#members"><div>Members</div></a>
-        <a href="#tasks"><div>Tasks</div></a>
+        <a th:if="${#authorization.expression('isAuthenticated()')}" href="/admin-dashboard">
+            <div>Admin Dashboard</div></a>
         <a th:if="${#authorization.expression('isAnonymous()')}" href="/login">
             <div>Login</div></a>
         <a th:if="${#authorization.expression('isAuthenticated()')}" href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();">
@@ -48,21 +48,5 @@
     <div th:if="${#authorization.expression('isAnonymous()')}">
         <h1>Welcome to the homepage!</h1>
     </div>
-
-    <br><br><br><br>
-
-    <h1>Here are the existing admin users:</h1>
-    <table>
-        <thead>
-        <tr>
-            <th>Username</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="admin : ${listaAdmin}">
-            <td th:text="${admin.username}">username</td>
-        </tr>
-        </tbody>
-    </table>
 </body>
 </html>

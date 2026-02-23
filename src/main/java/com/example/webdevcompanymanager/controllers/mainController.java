@@ -37,6 +37,16 @@ public class mainController {
         return "homePage";
     }
 
+    @GetMapping("/admin-dashboard")
+    public String adminDashboardPage(Model model, Authentication authentication) {
+        model.addAttribute("listaAdmin", adminUserRepository.findAll());
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "adminDashboard";
+        }else{
+            return "access-denied";
+        }
+    }
+
     @PostMapping("/account/change-default-password")
     public String changeDefaultPassword(@RequestParam String newPassword, Authentication authentication) {
         if (authentication != null) {
