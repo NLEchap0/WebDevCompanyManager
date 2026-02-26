@@ -1,10 +1,12 @@
 package com.example.webdevcompanymanager.database;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDate;
 
 @Entity
+@Data
 public class ShowOnlyUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

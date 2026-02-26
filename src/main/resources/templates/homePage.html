@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="/Stylesheets/general.css">
     <link rel="icon" href="/Images/favicon.ico" type="image/x-icon">
     <style>
-        table { width: 50%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #007bff; color: white; }
         .overlay {position: fixed; top: 0; left: 0; width: 100%; height: 100%;background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 1000;}
         .popup {background: white; padding: 30px; border-radius: 10px; text-align: center;}
         .popup input { display: block; width: 100%; margin: 10px 0; padding: 8px; }
@@ -31,13 +28,10 @@
     </div>
 
     <nav>
-        <a href="#homepage"><div>Homepage</div></a>
-        <a th:if="${#authorization.expression('isAuthenticated()')}" href="/admin-dashboard">
-            <div>Admin Dashboard</div></a>
-        <a th:if="${#authorization.expression('isAnonymous()')}" href="/login">
-            <div>Login</div></a>
-        <a th:if="${#authorization.expression('isAuthenticated()')}" href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();">
-            <div>Logout</div></a>
+        <a href="/"><div>Homepage</div></a>
+        <a th:if="${#authorization.expression('isAuthenticated()')}" href="/admin-dashboard"><div>Admin Dashboard</div></a>
+        <a th:if="${#authorization.expression('isAnonymous()')}" href="/login"><div>Login</div></a>
+        <a th:if="${#authorization.expression('isAuthenticated()')}" href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();"><div>Logout</div></a>
     </nav>
     <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
 

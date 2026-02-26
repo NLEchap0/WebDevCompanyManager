@@ -1,6 +1,7 @@
 package com.example.webdevcompanymanager.controllers;
 
 import com.example.webdevcompanymanager.database.AdminUser;
+import com.example.webdevcompanymanager.database.ShowOnlyUser;
 import com.example.webdevcompanymanager.repository.AdminUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -40,6 +41,7 @@ public class mainController {
     @GetMapping("/admin-dashboard")
     public String adminDashboardPage(Model model, Authentication authentication) {
         model.addAttribute("listaAdmin", adminUserRepository.findAll());
+        model.addAttribute("showOnlyUser", new ShowOnlyUser());
         if (authentication != null && authentication.isAuthenticated()) {
             return "adminDashboard";
         }else{

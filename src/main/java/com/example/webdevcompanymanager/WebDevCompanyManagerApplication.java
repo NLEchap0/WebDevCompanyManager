@@ -8,6 +8,7 @@ public class WebDevCompanyManagerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(WebDevCompanyManagerApplication.class, args);
+        System.out.println("Applicazione in esecuzione");
     }
 
 }

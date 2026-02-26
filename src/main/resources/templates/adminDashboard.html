@@ -1,10 +1,200 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web Dev Company Manager</title>
+    <link rel="stylesheet" href="/Stylesheets/navbar.css">
+    <link rel="stylesheet" href="/Stylesheets/general.css">
+    <link rel="icon" href="/Images/favicon.ico" type="image/x-icon">
+    <style>
+        :root {
+            --primary-blue: #0d6efd;
+            --soft-bg: #f8f9fa;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--soft-bg);
+            padding-bottom: 10px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+
+        /* Miglioramento Input */
+        .input-group-text {
+            background-color: #fff;
+            color: var(--primary-blue);
+            border-right: none;
+        }
+
+        .form-control, .form-select {
+            border-left: none;
+            padding: 10px 12px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            box-shadow: none;
+            border-color: #dee2e6;
+        }
+
+        .input-group:focus-within {
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+            border-radius: 8px;
+        }
+
+        .btn-save {
+            padding: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+        }
+    </style>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/air.css">
 </head>
 <body>
-<h1>This is the admin dashboard</h1>
+<nav>
+    <a href="/"><div>Homepage</div></a>
+    <a th:if="${#authorization.expression('isAuthenticated()')}" href="/admin-dashboard"><div>Admin Dashboard</div></a>
+    <a th:if="${#authorization.expression('isAnonymous()')}" href="/login"><div>Login</div></a>
+    <a th:if="${#authorization.expression('isAuthenticated()')}" href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();"><div>Logout</div></a>
+</nav>
+<form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+
+
+<div class="container">
+    <div class="form-container">
+        <h2 class="section-title text-center"><i class="bi bi-person-gear me-2"></i>Anagrafica Utente</h2>
+
+        <form th:action="@{/api/users}" th:object="${showOnlyUser}" method="POST">
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nome</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" th:field="*{name}" class="form-control" placeholder="Es. Mario" required>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Cognome</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person-vcard"></i></span>
+                        <input type="text" th:field="*{surname}" class="form-control" placeholder="Es. Rossi" required>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <label class="form-label">Email Professionale</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" th:field="*{email}" class="form-control" placeholder="mario.rossi@company.com" required>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <label class="form-label">Telefono</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                        <input type="tel" th:field="*{phone}" class="form-control" placeholder="+39 333...">
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label">Indirizzo di Residenza</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                        <input type="text" th:field="*{address}" class="form-control" placeholder="Via Roma 12">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Città</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-building"></i></span>
+                        <input type="text" th:field="*{city}" class="form-control" placeholder="Milano">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Data di Nascita</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                        <input type="text" id="birthdayPicker" th:field="*{birthday}" class="form-control bg-white" placeholder="Seleziona data...">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Genere</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-gender-ambiguous"></i></span>
+                        <select th:field="*{gender}" class="form-select">
+                            <option value="" selected disabled>Seleziona...</option>
+                            <option value="M">Maschio</option>
+                            <option value="F">Femmina</option>
+                            <option value="Altro">Altro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Ruolo Aziendale</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-briefcase"></i></span>
+                        <input type="text" th:field="*{role}" class="form-control" placeholder="Es. Senior Backend Developer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 d-grid">
+                <button type="submit" class="btn btn-primary btn-save btn-lg">
+                    <i class="bi bi-check-circle me-2"></i>Salva Profilo Utente
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/it.js"></script>
+
+<script>
+    flatpickr("#birthdayPicker", {
+        locale: "it",
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "d F Y",
+        maxDate: "today",
+        allowInput: true
+    });
+</script>
 </body>
 </html>
