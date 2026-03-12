@@ -28,7 +28,7 @@ public class mainController {
             if (username.equals("superadmin")) {
                 AdminUser admin = adminUserRepository.findByUsername("superadmin").orElse(null);
                 String password = admin.getPassword();
-                if (admin != null && passwordEncoder.matches("superadmin", password)) {
+                if (passwordEncoder.matches("superadmin", password)) {
                     model.addAttribute("mustChangePassword", true);
                 }
             }
@@ -52,5 +52,10 @@ public class mainController {
     @GetMapping("/login")
     public String loginPage() {
         return "loginPage";
+    }
+
+    @GetMapping("/logout")
+    public String logoutPage() {
+        return "logoutPage";
     }
 }

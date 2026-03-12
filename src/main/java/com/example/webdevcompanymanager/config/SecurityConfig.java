@@ -16,6 +16,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login").anonymous()
+                        .requestMatchers("/logout").authenticated()
                         .anyRequest().permitAll() // Everybody can see everything
                 )
                 .formLogin(form -> form
@@ -26,6 +28,8 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/") // Where to go after the logout
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                         .permitAll()
                 );
 
